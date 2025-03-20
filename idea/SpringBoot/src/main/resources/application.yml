@@ -1,0 +1,26 @@
+
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/fdsf?useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: dzc1416237645
+
+
+Logging:
+  level:
+    com.wms: debug
+
+
+ipfs:
+  config:
+    multi-addr: /ip4/127.0.0.1/tcp/5001 # ipfs的服务器地址和端口
+
+
+key:
+  save:
+    path: src/main/resources/keystore/
+
