@@ -11,6 +11,7 @@ import com.example.demo.commom.Result;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserLink;
 import com.example.demo.entity.Userkey;
+import com.example.demo.fisco.HelloWorld;
 import com.example.demo.fiscoUtil;
 import com.example.demo.mapper.UserkeyMapper;
 import com.example.demo.mapper.UserMapper;
@@ -19,6 +20,7 @@ import com.example.demo.utils.TokenUtils;
 import org.fisco.bcos.sdk.client.Client;
 import org.fisco.bcos.sdk.client.protocol.response.BlockNumber;
 import org.fisco.bcos.sdk.crypto.keypair.CryptoKeyPair;
+import org.fisco.bcos.sdk.model.TransactionReceipt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.sql.SQLOutput;
 import java.util.Base64;
 import java.util.List;
 
@@ -104,7 +107,28 @@ public class UserController {
     @CrossOrigin
     @PostMapping("/login")
     public Result<?> login(@RequestBody User user) throws Exception {
+        System.out.println("lalalalalala");
+        fiscoUtil fiscoutil = new fiscoUtil();
+        Client client = fiscoutil.bcosSDK.getClient(Integer.valueOf(1));
+//
+//
+        // 获取群组1的块高
+        BlockNumber blockNumber = client.getBlockNumber();
+        System.out.println("blockNumber: " + blockNumber);
+        // 向群组1部署HelloWorld合约
+        CryptoKeyPair cryptoKeyPair = client.getCryptoSuite().getCryptoKeyPair();
+        HelloWorld helloWorld = HelloWorld.deploy(client, cryptoKeyPair);
 
+        // 调用HelloWorld合约的get接口
+        String getValue = helloWorld.get();
+        System.out.println("getValue: " + getValue);
+
+        // 调用HelloWorld合约的set接口
+        TransactionReceipt receipt = helloWorld.set("Hello, fisco");
+        System.out.println("receipt: " + receipt);
+        System.out.println("getValue: " + helloWorld.get());
+
+        System.out.println("HAHAHAHAHAHAHAHA");
          User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername,user.getUsername()).eq(User::getPassword,user.getPassword()));
          if(res == null)
          {
@@ -120,13 +144,8 @@ public class UserController {
 //        String hash = ipfsutil.uploadToIpfs(data);
 //        System.out.println(hash);
 
-//        fiscoUtil fiscoutil = new fiscoUtil();
-//        Client client = fiscoutil.bcosSDK.getClient(Integer.valueOf(1));
-//
-//
-//        // 获取群组1的块高
-//        BlockNumber blockNumber = client.getBlockNumber();
-//        // 向群组1部署HelloWorld合约
+
+// 向群组1部署HelloWorld合约
 //        CryptoKeyPair cryptoKeyPair = client.getCryptoSuite().getCryptoKeyPair();
 //        ERC3525 erc3525 = ERC3525.deploy(client, cryptoKeyPair, "1", "1", BigInteger.valueOf(1));
 //        String name = erc3525.name();

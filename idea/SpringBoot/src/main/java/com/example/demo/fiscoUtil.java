@@ -9,6 +9,7 @@ import org.fisco.bcos.sdk.transaction.model.dto.TransactionResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class fiscoUtil {
 
@@ -16,7 +17,8 @@ public class fiscoUtil {
 
     public fiscoUtil() throws Exception {
         // 初始化BcosSDK对象
-        bcosSDK = BcosSDK.build("E:\\BlockChain\\NetworkSecurityInnovationCompetition\\CYLmanage\\idea\\SpringBoot\\src\\main\\resources\\config-example.toml");
-
+        String configPath = Objects.requireNonNull(getClass().getClassLoader().getResource("config-example.toml"))
+                .getPath();
+        bcosSDK = BcosSDK.build(configPath);
     }
 }
